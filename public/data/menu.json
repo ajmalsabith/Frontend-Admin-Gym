@@ -1,0 +1,27 @@
+{
+  "menu": [
+    {
+      "route": "admin/dashboard",
+      "name": "dashboard",
+      "type": "link",
+      "icon": "dashboard"
+    },
+    
+      {
+      "route": "admin/modules/gym-manage",
+      "name": "GymManagment",
+      "type": "link",
+      "icon": "manage_accounts"
+    },
+
+     {
+      "route": "admin/modules/user-manage",
+      "name": "UsersManagement",
+      "type": "link",
+      "icon": "badge"
+    }
+    
+  ]
+}
+
+

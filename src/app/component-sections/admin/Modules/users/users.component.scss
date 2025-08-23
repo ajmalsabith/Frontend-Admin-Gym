@@ -1,0 +1,110 @@
+.full-width {
+  width: 100%;
+}
+
+.m-r-8 {
+  margin-right: 8px;
+}
+
+.m-t-16 {
+  margin-top: 16px;
+}
+
+.form-field-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.filters-container {
+  display: flex;
+  align-items: center;
+//   margin-bottom: 15px;
+margin-top: 15px;
+}
+.filters-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes filters left & button right */
+  margin-bottom: 15px;
+}
+
+.filters-left {
+  display: flex;
+  align-items: center;
+}
+
+.filters-right {
+  flex-shrink: 0; /* Prevents the button from shrinking */
+}
+
+.password-row {
+  display: flex;
+  gap: 16px; /* space between username and password column */
+
+  .col-username {
+    flex: 1; /* Takes 50% of total width */
+  }
+
+  .col-passwords {
+    flex: 1; /* Takes other 50% */
+    display: flex;
+    gap: 16px; /* space between password and confirm password */
+
+    .col-half {
+      flex: 1; /* each takes 50% of right column */
+    }
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .upload-btn {
+  background-color: orange;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+  background-color: darkorange;
+}
+
+.logo-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-preview img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+}

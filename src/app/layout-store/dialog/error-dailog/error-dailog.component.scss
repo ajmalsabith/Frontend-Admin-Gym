@@ -1,0 +1,22 @@
+
+
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.success-icon {
+  width: auto;
+  height: auto;
+  font-size: 64px;         /* Make icon bigger */
+  color: rgb(249, 62, 5);
+  margin-bottom: 7px;     /* Add space below icon */
+}
+
+.success-message {
+  font-size: 18px;
+  color: #333;
+}

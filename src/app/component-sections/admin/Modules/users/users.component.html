@@ -1,0 +1,235 @@
+<page-header class="bg-cyan-50" title="Users" />
+<mat-tab-group [(selectedIndex)]="selectedTabIndex">
+
+  <!-- Tab 1: Staff List -->
+<mat-tab label="User List">
+  <div class="filters-container">
+    <div class="filters-left">
+      <!-- Search Filter -->
+      <mat-form-field appearance="outline" style="width: 300px; margin-right: 10px;">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Search by name or email" [(ngModel)]="searchText" (input)="applyFilters()" />
+      </mat-form-field>
+
+      <!-- Status Filter -->
+      <mat-form-field appearance="outline" style="width: 200px;">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="statusFilter" (selectionChange)="applyFilters()">
+          <mat-option value="">All</mat-option>
+          <mat-option value="Active">Active</mat-option>
+          <mat-option value="Inactive">Inactive</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="filters-right">
+      <button mat-flat-button class="add-button" (click)="addUser()">Create New User</button>
+    </div>
+  </div>
+
+
+
+ 
+
+
+
+  <mtx-grid
+    [data]="filteredList"
+    [columns]="columns"
+    [loading]="false"
+    [columnResizable]="false"
+    [rowSelectable]="false"
+    [rowHover]="true"
+    [rowStriped]="false"
+    [showToolbar]="true"
+    [columnHideable]="true"
+    [columnSortable]="true"
+    [columnPinnable]="true"
+    [expandable]="false"
+    [pageOnFront]="true"
+    [showPaginator]="true"
+    [pageSizeOptions]="[5, 10, 50, 100]"
+    [pageIndex]="0"
+    [pageSize]="5"
+    [toolbarTitle]="'User List'"
+    (rowClick)="onRowClick($event)"
+  ></mtx-grid>
+</mat-tab>
+
+
+  <!-- Tab 2: Staff Details Form -->
+<mat-tab label="User Details" [disabled]="UserDetailsTabDisabled">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>User Details</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="UserForm" class="form-field-grid">
+
+        <!-- User ID (Readonly) -->
+        <div class="form-row">
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>User ID</mat-label>
+          <input matInput formControlName="userId" readonly />
+        </mat-form-field>
+
+           <mat-form-field appearance="fill">
+            <mat-label>Gym</mat-label>
+            <mat-select formControlName="gymId">
+              <mat-option *ngFor="let gym of Gymlist" [value]="gym._id">{{gym?.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option value="male">Male</mat-option>
+              <mat-option value="female">Female</mat-option>
+              <mat-option value="other">Other</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        
+        </div>
+
+        <div class="form-row">
+
+          <mat-form-field appearance="fill">
+  <mat-label>Email</mat-label>
+  <input matInput formControlName="email" required />
+  <mat-error *ngIf="UserForm.get('email')?.invalid">
+    {{ getErrorMessage() }}
+  </mat-error>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Password</mat-label>
+  <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required />
+  <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+    <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+  </button>
+  <mat-error *ngIf="UserForm.get('password')?.invalid">
+    Password is required
+  </mat-error>
+</mat-form-field>
+
+          
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dob" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role" required>
+              <mat-option value="player">Player</mat-option>
+              <mat-option value="trainer">Trainer</mat-option>
+              <mat-option value="admin">Admin</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+             <mat-form-field appearance="fill">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="IsStatus" required>
+              <mat-option value="Active">Active</mat-option>
+              <mat-option value="Inactive">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+    <div class="logo-upload-container">
+  <input 
+    id="logoUpload" 
+    type="file" 
+    accept="image/*" 
+    (change)="onLogoSelected($event)" 
+    hidden
+  />
+  <label for="logoUpload" class="upload-btn">Upload Photo</label>
+
+  <div class="logo-preview" *ngIf="UserForm.get('photo')?.value">
+    <img [src]="UserForm.get('photo')?.value" alt="Logo Preview" width="150px" height="100px" />
+  </div>
+</div>
+        </div>
+
+        <!-- Address Fields -->
+          <div class="form-row">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Address Line 1</mat-label>
+            <input matInput formControlName="line1" />
+          </mat-form-field>
+        </div>
+
+        <!-- Address Fields -->
+        <div class="form-row">
+      
+          <mat-form-field appearance="fill">
+            <mat-label>Country</mat-label>
+            <input matInput formControlName="country" />
+          </mat-form-field>
+
+  <mat-form-field appearance="fill">
+  <mat-label>State</mat-label>
+  <mat-select formControlName="state" (selectionChange)="onStateChange($event.value)">
+    <mat-option *ngFor="let state of IndianStateDistList" [value]="state.state">
+      {{ state.state }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>District</mat-label>
+  <mat-select formControlName="district">
+    <mat-option *ngFor="let district of filteredDistricts" [value]="district">
+      {{ district }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+           <mat-form-field appearance="fill">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city" />
+          </mat-form-field>
+
+            <mat-form-field appearance="fill">
+            <mat-label>Zip</mat-label>
+            <input matInput formControlName="zip" />
+          </mat-form-field>
+      
+        </div>
+
+
+        <div class="form-buttons">
+          <button mat-raised-button class="cancel-button" type="button">Cancel</button>
+          <button mat-raised-button class="save-button"  (click)="onUserSubmit()" type="submit" [disabled]="UserForm.invalid">
+            Save
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</mat-tab>
+
+</mat-tab-group>

@@ -1,0 +1,63 @@
+{
+
+    "menu": [
+
+     {
+      "route": "client/dashboard",
+      "name": "clientdashboard",
+      "type": "link",
+      "icon": "dashboard"
+    },
+
+         
+     {
+      "route": "client/modules/player-manage",
+      "name": "Players",
+      "type": "link",
+      "icon": "badge"
+    },
+    {
+      "route": "client/modules/trainer-manage",
+      "name": "Trainers",
+      "type": "link",
+      "icon": "manage_accounts"
+    },
+    {
+      "route": "client/modules/attendance-check-in",
+      "name": "AttendanceCheckinSystem",
+      "type": "link",
+      "icon": "barcode_reader"
+    },
+    {
+      "route": "client/modules/membership-plans",
+      "name": "membershipplans",
+      "type": "link",
+      "icon": "card_membership"
+    },
+    {
+      "route": "client/modules/payment-billing",
+      "name": "paymentbilling",
+      "type": "link",
+      "icon": "attach_money"
+    },
+    {
+      "route": "client/modules/reports-analytics",
+      "name": "ReportsAnalytics",
+      "type": "link",
+      "icon": "analytics"
+    },
+    {
+      "route": "client/modules/updates-reminders",
+      "name": "UpdatesReminders",
+      "type": "link",
+      "icon": "notifications_active"
+    }
+
+
+   
+    
+
+    
+  ]
+
+}
