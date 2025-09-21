@@ -164,7 +164,8 @@ GetGymList(): void {
       }
 
 
-      onLogoSelected(event: Event): void {
+   
+onLogoSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
   if (!input.files || input.files.length === 0) {
     return;
@@ -173,19 +174,55 @@ GetGymList(): void {
   const file = input.files[0];
   const reader = new FileReader();
 
-  reader.onload = () => {
-    const base64String = (reader.result as string).split(',')[1] || '';
+  reader.onload = (e: any) => {
+    const img = new Image();
+    img.src = e.target.result;
 
-    this.UserForm.patchValue({
-      photo: `data:${file.type};base64,${base64String}`
-    });
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d')!;
 
-    // Optionally mark the form control as touched
-    this.UserForm.get('photo')?.markAsDirty();
+      // ✅ Resize image if too large (optional)
+      const maxWidth = 800;   // adjust as needed
+      const maxHeight = 800;  // adjust as needed
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxWidth || height > maxHeight) {
+        if (width > height) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        } else {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // ✅ Convert to compressed base64 (JPEG, quality 0.7)
+      let base64String = canvas.toDataURL('image/jpeg', 0.7);
+
+      // Ensure it's within 1 MB (retry with lower quality if needed)
+      let quality = 0.7;
+      while (base64String.length / 1024 > 1024 && quality > 0.2) {
+        quality -= 0.1;
+        base64String = canvas.toDataURL('image/jpeg', quality);
+      }
+
+      this.UserForm.patchValue({
+        photo: base64String
+      });
+
+      this.UserForm.get('photo')?.markAsDirty();
+    };
   };
 
   reader.readAsDataURL(file);
 }
+
     
 
   getErrorMessage(): string {
@@ -204,7 +241,21 @@ GetGymList(): void {
 
   
    this.columns = [
-  { header: 'User ID', field: 'userId', sortable: true },
+  {
+  header: 'Photo',
+  field: 'photo',
+  width: '80px',
+  formatter: (rowData: any) => {
+    const photoSrc = rowData.photo || 'images/teckfuel_usericon.png';
+    return `<img 
+              src="${photoSrc}" 
+              width="50" 
+              height="50" 
+              style="border-radius: 50%; object-fit: cover; display: block;" 
+              alt="User photo" />`;
+  }
+},
+  { header: 'User ID', field: 'playerid', sortable: true },
   { header: 'Name', field: 'name', sortable: true },
   { 
     header: 'Gym Name', 
@@ -240,16 +291,19 @@ GetGymList(): void {
 
   
     
+    GymSelect=''
   
     applyFilters() {
       const search = this.searchText.toLowerCase().trim();
       const status = this.statusFilter;
+      const GymSelect = this.GymSelect;      
   
       this.filteredList = this.list.filter(item => {
         const fullName = `${item.first_name} ${item.last_name}`.toLowerCase();
         const matchesSearch = !search || fullName.includes(search) || item.email.toLowerCase().includes(search);
         const matchesStatus = !status || item.status === status;
-        return matchesSearch && matchesStatus;
+        const matchesGym = !GymSelect || item.gymId?._id === GymSelect;
+        return matchesSearch && matchesStatus && matchesGym
       });
     }
   

@@ -35,6 +35,20 @@ export class GymComponent {
     isEditing = false;
   
  columns: MtxGridColumn[] = [
+  {
+  header: 'Logo',
+  field: 'logo',
+  width: '80px',
+  formatter: (rowData: any) => {
+    const photoSrc = rowData.logo || 'images/teckfuel_usericon.png';
+    return `<img 
+              src="${photoSrc}" 
+              width="50" 
+              height="50" 
+              style="border-radius: 50%; object-fit: cover; display: block;" 
+              alt="Gym Logo" />`;
+  }
+},
   { header: 'Gym ID', field: 'gymId', sortable: true },
   { header: 'Gym Name', field: 'name', sortable: true },
   { header: 'Owner Email', field: 'ownerEmail', sortable: true },
@@ -122,7 +136,10 @@ export class GymComponent {
       this.GetIndianStateDistList()
     }
   
-  onLogoSelected(event: Event): void {
+
+
+
+onLogoSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
   if (!input.files || input.files.length === 0) {
     return;
@@ -131,19 +148,55 @@ export class GymComponent {
   const file = input.files[0];
   const reader = new FileReader();
 
-  reader.onload = () => {
-    const base64String = (reader.result as string).split(',')[1] || '';
+  reader.onload = (e: any) => {
+    const img = new Image();
+    img.src = e.target.result;
 
-    this.reactiveForm1.patchValue({
-      logo: `data:${file.type};base64,${base64String}`
-    });
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d')!;
 
-    // Optionally mark the form control as touched
-    this.reactiveForm1.get('logo')?.markAsDirty();
+      // ✅ Resize image if too large (optional)
+      const maxWidth = 800;   // adjust as needed
+      const maxHeight = 800;  // adjust as needed
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxWidth || height > maxHeight) {
+        if (width > height) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        } else {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // ✅ Convert to compressed base64 (JPEG, quality 0.7)
+      let base64String = canvas.toDataURL('image/jpeg', 0.7);
+
+      // Ensure it's within 1 MB (retry with lower quality if needed)
+      let quality = 0.7;
+      while (base64String.length / 1024 > 1024 && quality > 0.2) {
+        quality -= 0.1;
+        base64String = canvas.toDataURL('image/jpeg', quality);
+      }
+
+      this.reactiveForm1.patchValue({
+        logo: base64String
+      });
+
+      this.reactiveForm1.get('logo')?.markAsDirty();
+    };
   };
 
   reader.readAsDataURL(file);
 }
+
 
     // Handle tab change
     onTabChange(index: number): void {

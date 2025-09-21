@@ -58,6 +58,7 @@ margin-top: 15px;
   display: flex;
   gap: 16px; /* space between username and password column */
 
+}
   .col-username {
     flex: 1; /* Takes 50% of total width */
   }
@@ -76,35 +77,48 @@ margin-top: 15px;
     width: 100%;
   }
 
-  .upload-btn {
-  background-color: orange;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-  border: none;
-  transition: background-color 0.3s ease;
-}
+
+
 
 .upload-btn:hover {
-  background-color: darkorange;
+  background-color: darkorange !important;
+  color: white;
+}
+.rounded-photo {
+  border-radius: 50% !important;
+  object-fit: cover !important;
 }
 
-.logo-upload-container {
+.upload-card {
+  width: 200px;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: #ede8e8 !important;
+}
+
+.image-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%; /* circular preview */
+  overflow: hidden;
+  border: 2px solid #ccc;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
 }
 
-.logo-preview img {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+.placeholder {
+  font-size: 14px;
+  color: #888;
 }

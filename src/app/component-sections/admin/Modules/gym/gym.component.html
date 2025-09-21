@@ -41,7 +41,7 @@
   [rowHover]="true"
   [rowStriped]="false"
   [showToolbar]="true"
-  [toolbarTitle]="'Client List'"
+  [toolbarTitle]="'Gym List'"
   [columnHideable]="true"
   [columnSortable]="true"
   [columnPinnable]="true"
@@ -64,16 +64,16 @@
     </mat-card-header>
 
     <mat-card-content>
-      <form [formGroup]="reactiveForm1" (ngSubmit)="onSubmit()" class="form-field-grid">
+      <form [formGroup]="reactiveForm1"  class="form-field-grid">
 
         <!-- Gym ID & Name -->
         <div class="form-row">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Gym ID</mat-label>
             <input matInput formControlName="gymId" readonly />
           </mat-form-field>
 
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Gym Name</mat-label>
             <input matInput formControlName="name" required />
           </mat-form-field>
@@ -81,7 +81,7 @@
 
         <!-- Owner Email & Phone -->
         <div class="form-row">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Owner Email</mat-label>
             <input matInput formControlName="ownerEmail" type="email" required />
             <mat-error *ngIf="reactiveForm1.get('ownerEmail')?.invalid">
@@ -89,7 +89,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Phone</mat-label>
             <input matInput formControlName="phone" />
           </mat-form-field>
@@ -98,7 +98,7 @@
 
         <!-- Subscription Status -->
         <div class="form-row">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Subscription Status</mat-label>
             <mat-select formControlName="subscriptionStatus" required>
               <mat-option value="active">Active</mat-option>
@@ -108,7 +108,7 @@
             </mat-select>
           </mat-form-field>
 
-           <mat-form-field appearance="fill">
+           <mat-form-field appearance="outline">
             <mat-label>Subscription Start Date</mat-label>
             <input matInput [matDatepicker]="picker1" formControlName="subscriptionStartDate" required />
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
@@ -116,7 +116,7 @@
           </mat-form-field>
 
 
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Subscription End Date</mat-label>
             <input matInput [matDatepicker]="picker2" formControlName="subscriptionEndDate" required />
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
@@ -127,7 +127,7 @@
     
      
          <div class="form-row">
-          <mat-form-field appearance="fill" class="full-width">
+          <mat-form-field appearance="outline" class="full-width">
             <mat-label>Address Line 1</mat-label>
             <input matInput formControlName="line1" />
           </mat-form-field>
@@ -136,12 +136,12 @@
         <!-- Address Fields -->
         <div class="form-row">
       
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Country</mat-label>
             <input matInput formControlName="country" />
           </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
   <mat-label>State</mat-label>
   <mat-select formControlName="state" (selectionChange)="onStateChange($event.value)">
     <mat-option *ngFor="let state of IndianStateDistList" [value]="state.state">
@@ -150,7 +150,7 @@
   </mat-select>
 </mat-form-field>
 
-<mat-form-field appearance="fill">
+<mat-form-field appearance="outline">
   <mat-label>District</mat-label>
   <mat-select formControlName="district">
     <mat-option *ngFor="let district of filteredDistricts" [value]="district">
@@ -160,12 +160,12 @@
 </mat-form-field>
 
 
-           <mat-form-field appearance="fill">
+           <mat-form-field appearance="outline">
             <mat-label>City</mat-label>
             <input matInput formControlName="city" />
           </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="outline">
             <mat-label>Zip</mat-label>
             <input matInput formControlName="zip" />
           </mat-form-field>
@@ -173,28 +173,40 @@
         </div>
 
         <div class="form-row">
-           <mat-form-field appearance="fill" >
+           <mat-form-field appearance="outline" >
             <mat-label>Website</mat-label>
             <input matInput formControlName="website" type="url" />
           </mat-form-field>
 
-         <div class="logo-upload-container">
+        </div>
+
+
+               <div class="upload-card">
+  <!-- Image Preview -->
+  <div class="image-preview">
+    <ng-container *ngIf="reactiveForm1.get('logo')?.value; else placeholder">
+      <img [src]="reactiveForm1.get('logo')?.value" width="120px" height="120px" alt="Preview" />
+    </ng-container>
+    <ng-template #placeholder>
+      <div class="placeholder">No logo</div>
+    </ng-template>
+  </div>
+
+  <!-- Hidden File Input -->
   <input 
-    id="logoUpload" 
     type="file" 
     accept="image/*" 
     (change)="onLogoSelected($event)" 
+    #fileInput 
     hidden
   />
-  <label for="logoUpload" class="upload-btn">Upload Logo</label>
 
-  <div class="logo-preview" *ngIf="reactiveForm1.get('logo')?.value">
-    <img [src]="reactiveForm1.get('logo')?.value" alt="Logo Preview" />
-  </div>
-</div>
+  <!-- Upload Button -->
+  <button mat-raised-button color="primary" class="upload-btn" (click)="fileInput.click()">
+    Upload Logo
+  </button>
 
-        </div>
-
+         </div>     
         <!-- Buttons -->
         <div class="form-buttons" style="margin-top: 20px;">
           <button mat-raised-button type="reset" class="cancel-button"
@@ -202,7 +214,7 @@
             style="margin-left: 10px;">
             Cancel
           </button>
-          <button mat-raised-button class="save-button" type="submit" [disabled]="reactiveForm1.invalid">
+          <button (click)="onSubmit()" mat-raised-button class="save-button" type="submit" [disabled]="reactiveForm1.invalid">
             Save
           </button>
         </div>
